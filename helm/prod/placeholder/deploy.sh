@@ -1,3 +1,3 @@
 #!/bin/bash
 
-../../../scripts/deploy.sh values.yaml srtp <aks-name> placeholder
+../../../scripts/deploy.sh values.yaml rtp <aks-name> placeholder
