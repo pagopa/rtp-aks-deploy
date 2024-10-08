@@ -1,0 +1,108 @@
+microservice-chart:
+  namespace: "rtp"
+
+#
+# Deploy
+#
+  deployment:
+    create: true
+#    forceRedeploy: true
+
+  image:
+    repository: <repo-path>
+    tag: 1.0.0
+    pullPolicy: Always
+
+  envSecret:
+
+  livenessProbe:
+    handlerType: httpGet
+    httpGet:
+      path: /actuator/health/liveness
+      port: 8080
+    initialDelaySeconds: 120
+    failureThreshold: 15
+    periodSeconds: 10
+
+  readinessProbe:
+    handlerType: httpGet
+    httpGet:
+      path: /actuator/health/readiness
+      port: 8080
+    initialDelaySeconds: 35
+    failureThreshold: 15
+    periodSeconds: 10
+
+
+#
+# Network
+#
+  service:
+    create: true
+    type: ClusterIP
+    ports:
+      - 8000
+
+  ingress:
+    create: true
+    host: ""
+    path: /<name>(/|$)(.*)
+    rewriteTarget: /$2
+    servicePort: 8000
+    # proxyBodySize: 2m
+    annotations: {
+      nginx.ingress.kubernetes.io/satisfy: "any"
+    }
+
+  serviceAccount:
+    name: <workload-identity-name>
+
+  podAnnotations: {}
+
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+
+  securityContext:
+    allowPrivilegeEscalation: false
+
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: "100m"
+    limits:
+      memory: "100Mi"
+      cpu: "100m"
+
+  autoscaling:
+    enable: false
+    minReplica: 1
+    maxReplica: 3
+    pollingInterval: 30 # seconds
+    cooldownPeriod: 300 # seconds
+    triggers:
+      - type: cpu
+        metadata:
+          type: Utilization
+          value: "60"
+
+  keyvault:
+    name: <kv-name>
+    tenantId: <tenant-id>
+
+  tmpVolumeMount:
+    create: true
+    mounts:
+      - name: tmp
+        mountPath: /tmp
+      - name: logs
+        mountPath: /app/logs
+  
+  azure:
+    workloadIdentityClientId: <workload-identity-client-id>
+
+  # nodeSelector: {}
+
+  # tolerations: []
+
+  # affinity: {}
