@@ -6,7 +6,7 @@ parameters:
       - dev
       - uat
       - prod
-      -
+
   - name: 'APP_NAME'
     displayName: 'Application to deploy'
     type: string
