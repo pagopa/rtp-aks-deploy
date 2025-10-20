@@ -6,11 +6,11 @@ parameters:
       - dev
       - uat
       - prod
-  - name: 'RTP-ACTIVATOR'
-    displayName: 'Application to deploy'
-    type: string
+  - name: APPS_TOP
+    displayName: 'Application TOP to deploy'
+    type: object
     values:
-      - status
+      - rtp-activator
 
 variables:
   ${{ if eq(parameters.ENV, 'uat') }}:
