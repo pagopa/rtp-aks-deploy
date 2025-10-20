@@ -6,11 +6,11 @@ parameters:
       - dev
       - uat
       - prod
-
-  - name: APPS_TOP
-    displayName: 'Application TOP to deploy'
-    type: object
-    default:
+      -
+  - name: 'APP_NAME'
+    displayName: 'Application to deploy'
+    type: string
+    values:
       - rtp-activator
 
 variables:
